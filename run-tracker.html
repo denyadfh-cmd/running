@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23080c10'/%3E%3Crect width='64' height='64' rx='16' fill='url(%23g1)'/%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2300ff9d' stop-opacity='0.12'/%3E%3Cstop offset='100%25' stop-color='%237eb8f7' stop-opacity='0.08'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='38' cy='10' r='5' fill='%2300ff9d'/%3E%3Cpath d='M38 15 L34 24 L26 28 L20 38 L14 50' stroke='%2300ff9d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M34 24 L42 27 L50 20' stroke='%2300ff9d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M26 28 L24 36' stroke='%2300ff9d' stroke-width='2.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FitTracker"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23080c10'/><stop offset='100%25' stop-color='%230d1821'/></linearGradient></defs><rect width='192' height='192' rx='40' fill='url(%23bg)'/><circle cx='120' cy='32' r='16' fill='%2300ff9d'/><path d='M120 48 L104 80 L80 92 L56 128 L40 168' stroke='%2300ff9d' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M104 80 L136 90 L160 64' stroke='%2300ff9d' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M80 92 L74 116' stroke='%2300ff9d' stroke-width='8' stroke-linecap='round' fill='none'/></svg>"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1"/>
+<title>FitTracker – Lari & Push Up Harian</title>
+<meta name="description" content="Aplikasi pencatat lari dan push up harian. Catat jarak, pace, set target push up, dan pantau perkembangan fitnesmu."/>
+<meta name="keywords" content="run tracker, pelacak lari, catat lari, aplikasi lari, running log, pace lari"/>
+<meta name="author" content="Run Tracker"/>
+<meta name="theme-color" content="#00ff9d"/>
+
+<!-- PWA Manifest -->
+<link rel="manifest" id="pwa-manifest"/>
+
+<!-- iOS PWA Support -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Run Tracker"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%23080c10'/><text y='130' x='50%' text-anchor='middle' font-size='110'>🏃</text></svg>"/>
+
+<!-- Open Graph (untuk share di sosmed) -->
+<meta property="og:title" content="Run Tracker – Catat Performa Larimu"/>
+<meta property="og:description" content="Aplikasi web gratis untuk catat lari, pantau pace dan jarak setiap bulan."/>
+<meta property="og:type" content="website"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#080c10;font-family:'Barlow Condensed',sans-serif;color:#e8f0fe;overflow-x:hidden}
+::-webkit-scrollbar{display:none}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+.card{background:#0e1520;border:1px solid #1a2535;border-radius:12px;padding:16px}
+.lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#445}
+.big{font-family:'Barlow Condensed';font-weight:800;font-size:34px;line-height:1}
+.inp{background:#0e1520;border:1px solid #2a3545;border-radius:8px;color:#e8f0fe;padding:10px 12px;width:100%;font-family:'Barlow';font-size:14px;outline:none}
+.inp:focus{border-color:#00ff9d66}
+.btn-g{background:#00ff9d;color:#080c10;border:none;border-radius:8px;padding:11px 0;width:100%;font-family:'Barlow Condensed';font-weight:800;font-size:16px;letter-spacing:1px;cursor:pointer}
+.btn-ghost{background:transparent;border:1px solid #2a3545;border-radius:8px;padding:9px 0;width:100%;font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:#889;cursor:pointer;letter-spacing:1px}
+.btn-export{background:transparent;border:1px solid #00ff9d;border-radius:8px;padding:7px 12px;font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:#00ff9d;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:5px;transition:background .15s}
+.btn-export:hover{background:#00ff9d18}
+.btn-export:disabled{opacity:.35;cursor:not-allowed;border-color:#445;color:#445}
+.chip{background:#0e1520;border:1px solid #1a2535;border-radius:20px;padding:5px 12px;cursor:pointer;font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:1px;color:#889;transition:all .15s}
+.chip.a{border-color:#00ff9d;color:#00ff9d;background:#00ff9d11}
+.chip.b{border-color:#7eb8f7;color:#7eb8f7;background:#7eb8f711}
+.yr-tab{background:transparent;border:none;padding:7px 14px;cursor:pointer;font-family:'Barlow Condensed';font-weight:700;font-size:15px;letter-spacing:1px;border-bottom:2px solid transparent;transition:all .15s;color:#445}
+.yr-tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
+.yr-tab:hover{color:#aaa}
+.del-btn{background:transparent;border:none;color:#ff4d6d;cursor:pointer;font-size:16px;padding:4px 8px;font-weight:700}
+.edit-btn{background:transparent;border:none;color:#7eb8f7;cursor:pointer;font-family:'Barlow Condensed';font-weight:700;font-size:12px;letter-spacing:1px;padding:4px 8px}
+.hcell{width:11px;height:11px;border-radius:2px;flex-shrink:0;cursor:pointer;display:inline-block}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:up .3s ease forwards}
+.modal-bg{position:fixed;inset:0;background:#00000088;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#0e1520;border:1px solid #2a3545;border-radius:16px;padding:24px;width:100%;max-width:320px}
+.hidden{display:none!important}
+
+/* HEADER */
+#header{padding:14px 16px 0;border-bottom:1px solid #1a2535;background:#080c10;position:sticky;top:0;z-index:50}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.header-btns{display:flex;gap:8px;align-items:center}
+#btn-add{border:none;border-radius:8px;width:34px;height:34px;font-weight:800;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.year-tabs{display:flex;gap:0;overflow-x:auto;align-items:center}
+
+/* FORM */
+#form-section{padding:12px 16px;border-bottom:1px solid #1a2535;background:#0a1018}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.form-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#form-err{font-size:12px;color:#ff4d6d;margin-bottom:8px}
+
+/* CONTENT */
+#content{flex:1;overflow-y:auto;padding-bottom:80px}
+.tab-pane{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.tab-pane.gap8{gap:8px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* NAV */
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#0a0f18;border-top:1px solid #1a2535;display:flex;z-index:100}
+.nav-btn{flex:1;background:transparent;border:none;padding:10px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center}.nav-icon svg{width:20px;height:20px;stroke:#445;transition:stroke .2s}.nav-icon.active svg{stroke:#00ff9d}
+.nav-label{font-family:'Barlow Condensed';font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:color .2s}
+.nav-dot{width:18px;height:2px;background:#00ff9d;border-radius:1px;margin-top:1px}
+
+/* SVG Charts */
+.chart-wrap{width:100%;overflow:hidden}
+svg text{font-family:'Barlow Condensed',sans-serif}
+
+/* Empty state */
+.empty{background:#0e1520;border:1px solid #1a2535;border-radius:12px;padding:36px 20px;text-align:center;margin-top:8px}
+
+/* Log item */
+.log-item{background:#0e1520;border:1px solid #1a2535;border-radius:12px;padding:16px;display:flex;align-items:center;gap:8px}
+
+/* JADWAL */
+.jadwal-day{border-radius:12px;overflow:hidden;border:1px solid #1a2535}
+.jadwal-day.today{border-color:#00ff9d55;box-shadow:0 0 0 1px #00ff9d22}
+.jadwal-day-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none}
+.jadwal-day-body{padding:0 14px 12px;display:flex;flex-direction:column;gap:8px}
+.sesi-pill{display:flex;align-items:center;gap:10px;border-radius:8px;padding:9px 12px}
+.sesi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.check-box{width:22px;height:22px;border-radius:6px;border:2px solid;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+/* PUSHUP SECTION */
+.pushup-ring{position:relative;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.pushup-ring svg{transform:rotate(-90deg)}
+.pu-count-display{position:absolute;text-align:center;pointer-events:none}
+.pu-btn{border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Barlow Condensed';transition:transform .1s,box-shadow .15s}
+.pu-btn:active{transform:scale(.93)}
+.streak-fire{animation:flicker 1.5s ease-in-out infinite}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(1.05)}}
+.tab-push{background:#0e1520;border:1px solid #1a2535;border-radius:12px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:8px}
+
+.cmp-grid{display:grid;grid-template-columns:1fr 36px 1fr;gap:8px;align-items:center}
+.cmp-card{background:#0e1520;border-radius:12px;padding:14px 12px;text-align:center}
+.conclude-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #1a2535}
+.bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:2px}
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.383.0/umd/lucide.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div id="header">
+    <div class="header-top">
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#00ff9d">FIT TRACKER</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;line-height:1" id="header-title">PERFORMA LARI <span style="color:#00ff9d" id="header-year"></span></div>
+      </div>
+      <div class="header-btns">
+        <button class="btn-export" id="btn-export" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
+        <button id="btn-add" style="background:#00ff9d;color:#080c10">+</button>
+      </div>
+    </div>
+    <div class="year-tabs" id="year-tabs"></div>
+  </div>
+
+  <!-- FORM -->
+  <div id="form-section" class="hidden fade">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#00ff9d;margin-bottom:10px" id="form-title">TAMBAH SESI</div>
+    <div class="form-grid">
+      <div><div class="lbl" style="margin-bottom:4px">Tanggal</div><input type="date" class="inp" id="f-date"/></div>
+      <div><div class="lbl" style="margin-bottom:4px">Jarak km</div><input type="number" placeholder="10.5" class="inp" id="f-dist" step="0.1" min="0"/></div>
+      <div><div class="lbl" style="margin-bottom:4px">Pace /km</div><input type="number" placeholder="7.32" class="inp" id="f-pace" step="0.1" min="0"/></div>
+    </div>
+    <div id="form-err" class="hidden"></div>
+    <div class="form-actions">
+      <button class="btn-ghost" id="btn-cancel">Batal</button>
+      <button class="btn-g" id="btn-save">Simpan</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard" class="tab-pane fade">
+      <!-- TODAY WORKOUT CARD -->
+      <div id="dashboard-today-workout"></div>
+
+      <div id="empty-dashboard" class="empty hidden">
+        <div style="font-size:40px;margin-bottom:10px">🏃</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px;margin-bottom:6px" id="empty-year-d"></div>
+        <div style="font-size:13px;color:#445;line-height:1.6">Tekan <span style="color:#00ff9d;font-weight:700">+</span> di atas<br/>untuk mulai catat larimu</div>
+      </div>
+      <div id="stats-cards" class="stats-grid hidden"></div>
+      <div id="chart-cumulative" class="card hidden"></div>
+      <div id="chart-weekly" class="card hidden"></div>
+      <div id="chart-heatmap" class="card"></div>
+      <!-- TARGET -->
+      <div id="target-section" style="display:flex;flex-direction:column;gap:12px;margin-top:0">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#ff6b9d;padding-top:4px">🎯 TARGET JARAK</div>
+        <div class="card">
+          <div class="lbl" style="margin-bottom:8px;color:#ff6b9d">Pilih Target</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px" id="target-presets"></div>
+          <div id="custom-dist-row" class="hidden" style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+            <input type="number" class="inp" id="custom-dist-val" placeholder="contoh: 15" step="0.1" min="0.1" style="max-width:120px"/>
+            <span style="font-size:12px;color:#556">km</span>
+            <button class="btn-g" onclick="applyCustomDist()" style="width:auto;padding:10px 16px;font-size:13px">OK</button>
+          </div>
+          <div style="font-size:11px;color:#445">Target aktif: <span id="target-dist-label" style="color:#ff6b9d;font-weight:700">—</span></div>
+        </div>
+        <div class="card">
+          <div class="lbl" style="margin-bottom:8px;color:#ffb347">Mode Interval</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#889">
+              <input type="checkbox" id="interval-toggle" onchange="toggleIntervalMode()" style="accent-color:#ffb347;width:15px;height:15px"/>
+              Aktifkan interval
+            </label>
+          </div>
+          <div id="interval-config" class="hidden" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div><div class="lbl" style="margin-bottom:4px">Jarak interval (km)</div><input type="number" class="inp" id="interval-dist" placeholder="1" step="0.1" min="0.1" value="1"/></div>
+            <div><div class="lbl" style="margin-bottom:4px">Repetisi</div><input type="number" class="inp" id="interval-reps" placeholder="8" min="1" value="8"/></div>
+            <div><div class="lbl" style="margin-bottom:4px">Pace target (/km)</div><input type="number" class="inp" id="interval-pace" placeholder="5.0" step="0.05" min="0.5"/></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn-g" onclick="calcInterval()" style="font-size:13px;padding:10px 0">Hitung</button></div>
+          </div>
+          <div id="interval-result" class="hidden" style="margin-top:10px"></div>
+        </div>
+        <div id="target-progress-card" class="card hidden"></div>
+        <div id="target-sessions-card" class="card hidden"></div>
+      </div>
+    </div>
+
+    <!-- BULANAN -->
+    <div id="tab-bulanan" class="tab-pane hidden fade">
+      <div id="empty-bulanan" class="empty hidden"></div>
+      <div id="monthly-cards"></div>
+      <div id="chart-pace" class="card hidden" style="margin-top:10px"></div>
+      <button onclick="switchTab('bandingkan')" class="btn-ghost" style="margin-top:4px;font-size:13px">📊 Bandingkan Bulan / Hari →</button>
+    </div>
+
+    <!-- BANDINGKAN -->
+    <div id="tab-bandingkan" class="tab-pane hidden fade" style="gap:12px">
+      <!-- Sub-tab toggle -->
+      <div style="display:flex;background:#0e1520;border:1px solid #1a2535;border-radius:10px;padding:3px;gap:3px">
+        <button id="sub-harian-btn" onclick="switchSubCmp('harian')" style="flex:1;background:#00ff9d;color:#080c10;border:none;border-radius:7px;padding:8px 0;font-family:'Barlow Condensed';font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer">📆 HARIAN</button>
+        <button id="sub-bulanan-btn" onclick="switchSubCmp('bulanan')" style="flex:1;background:transparent;color:#445;border:none;border-radius:7px;padding:8px 0;font-family:'Barlow Condensed';font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer">📅 BULANAN</button>
+      </div>
+
+      <!-- SUB: HARIAN -->
+      <div id="sub-harian">
+        <div id="empty-harian" class="empty hidden"></div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="lbl" style="margin-bottom:8px;color:#00ff9d">Hari A</div>
+          <input type="date" class="inp" id="harian-a" style="margin-bottom:14px" onchange="renderHarian()"/>
+          <div class="lbl" style="margin-bottom:8px;color:#7eb8f7">Hari B</div>
+          <input type="date" class="inp" id="harian-b" onchange="renderHarian()"/>
+        </div>
+        <div id="harian-cards" class="cmp-grid" style="margin-bottom:12px"></div>
+        <div id="harian-conclude" class="card hidden"></div>
+      </div>
+
+      <!-- SUB: BULANAN -->
+      <div id="sub-bulanan" class="hidden">
+        <div id="empty-cmp" class="empty hidden"></div>
+        <div class="card" id="cmp-picker">
+          <div class="lbl" style="margin-bottom:8px;color:#00ff9d">Bulan A</div>
+          <div id="chips-a" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px"></div>
+          <div class="lbl" style="margin-bottom:8px;color:#7eb8f7">Bulan B</div>
+          <div id="chips-b" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+        </div>
+        <div id="cmp-cards" class="cmp-grid"></div>
+        <div id="chart-cmp" class="card hidden"></div>
+        <div id="cmp-conclude" class="card hidden"></div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <!-- LOG -->
+    <div id="tab-log" class="tab-pane gap8 hidden fade">
+      <div class="lbl" id="log-count"></div>
+      <div id="empty-log" class="empty hidden"></div>
+      <div id="log-list"></div>
+    </div>
+    <!-- JADWAL WORKOUT -->
+    <div id="tab-jadwal" class="tab-pane hidden fade" style="gap:0;padding:0">
+      <!-- Today highlight -->
+      <div id="jadwal-today-banner" style="margin:14px 16px 0"></div>
+      <!-- Week view -->
+      <div style="padding:12px 16px 80px;display:flex;flex-direction:column;gap:10px" id="jadwal-week-list"></div>
+    </div>
+
+    <!-- PUSH UP -->
+    <div id="tab-pushup" class="tab-pane hidden fade" style="gap:14px">
+      <!-- Header Ring + Counter -->
+      <div class="card" style="text-align:center;padding:20px 16px 16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#ff6b9d;margin-bottom:4px">💪 PUSH UP HARIAN</div>
+        <div id="pu-date-label" style="font-size:12px;color:#445;margin-bottom:16px"></div>
+
+        <!-- Ring Progress -->
+        <div class="pushup-ring" id="pu-ring-wrap" style="width:180px;height:180px;margin-bottom:16px">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="78" fill="none" stroke="#1a2535" stroke-width="12"/>
+            <circle id="pu-ring-fill" cx="90" cy="90" r="78" fill="none" stroke="#ff6b9d" stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="490" stroke-dashoffset="490" style="transition:stroke-dashoffset .4s ease"/>
+          </svg>
+          <div class="pu-count-display">
+            <div id="pu-done-num" style="font-family:'Barlow Condensed';font-weight:800;font-size:52px;line-height:1;color:#ff6b9d">0</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#445">/ <span id="pu-target-num">30</span></div>
+          </div>
+        </div>
+
+        <!-- +/- buttons -->
+        <div style="display:flex;gap:16px;align-items:center;justify-content:center;margin-bottom:14px">
+          <button class="pu-btn" onclick="adjustPushup(-5)" style="width:48px;height:48px;background:#1a2535;color:#889;font-size:20px">−5</button>
+          <button class="pu-btn" onclick="adjustPushup(-1)" style="width:44px;height:44px;background:#1a2535;color:#889;font-size:22px">−</button>
+          <button class="pu-btn" onclick="adjustPushup(1)" style="width:56px;height:56px;background:#ff6b9d;color:#080c10;font-size:26px;box-shadow:0 0 20px #ff6b9d55">+</button>
+          <button class="pu-btn" onclick="adjustPushup(5)" style="width:44px;height:44px;background:#1a2535;color:#889;font-size:16px">+5</button>
+          <button class="pu-btn" onclick="adjustPushup(10)" style="width:48px;height:48px;background:#1a2535;color:#889;font-size:14px">+10</button>
+        </div>
+        <button class="btn-ghost" onclick="resetTodayPushup()" style="max-width:200px;font-size:12px">Reset Hari Ini</button>
+      </div>
+
+      <!-- Target setting -->
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#ffb347;margin-bottom:10px">🎯 SET TARGET HARIAN</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px" id="pu-preset-btns"></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="number" class="inp" id="pu-custom-target" placeholder="contoh: 50" min="1" max="1000" style="max-width:110px"/>
+          <button class="btn-g" onclick="applyPushupTarget()" style="width:auto;padding:10px 16px;font-size:13px">Set</button>
+        </div>
+        <div style="font-size:11px;color:#445;margin-top:8px">Target aktif: <span id="pu-target-label" style="color:#ffb347;font-weight:700">30 push up</span></div>
+      </div>
+
+      <!-- Streak & Stats -->
+      <div class="stats-grid">
+        <div class="card" style="text-align:center">
+          <div class="lbl">Streak 🔥</div>
+          <div class="big" id="pu-streak-num" style="color:#ff6b9d">0</div>
+          <div style="font-size:10px;color:#445">hari</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="lbl">Total Bulan Ini</div>
+          <div class="big" id="pu-month-total" style="color:#ffb347">0</div>
+          <div style="font-size:10px;color:#445">push up</div>
+        </div>
+      </div>
+
+      <!-- Weekly History -->
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#7eb8f7;margin-bottom:12px">📅 7 HARI TERAKHIR</div>
+        <div id="pu-weekly-bars" style="display:flex;gap:6px;align-items:flex-end;height:70px;padding-bottom:20px;position:relative"></div>
+      </div>
+
+      <!-- Log harian pushup -->
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#7eb8f7;margin-bottom:10px">📋 LOG PUSH UP</div>
+        <div id="pu-log-list"></div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <button class="nav-btn" data-tab="dashboard"><span class="nav-icon active" id="ni-dashboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span class="nav-label" id="nl-dashboard" style="color:#00ff9d">Dashboard</span><div class="nav-dot" id="nd-dashboard"></div></button>
+    <button class="nav-btn" data-tab="bulanan"><span class="nav-icon" id="ni-bulanan"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><span class="nav-label" id="nl-bulanan" style="color:#445">Bulanan</span></button>
+    <button class="nav-btn" data-tab="pushup"><span class="nav-icon" id="ni-pushup"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L3 15l3-3"/><path d="M3 15h12a6 6 0 0 0 0-12h-3"/><circle cx="18" cy="6" r="1.5" fill="currentColor"/></svg></span><span class="nav-label" id="nl-pushup" style="color:#445">Push Up</span></button>
+    <button class="nav-btn" data-tab="log"><span class="nav-icon" id="ni-log"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span><span class="nav-label" id="nl-log" style="color:#445">Log</span></button>
+  </nav>
+
+  <!-- ADD YEAR MODAL -->
+  <div id="modal-year" class="modal-bg hidden">
+    <div class="modal fade">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#00ff9d;margin-bottom:14px">TAMBAH TAHUN BARU</div>
+      <div class="lbl" style="margin-bottom:6px">Masukkan Tahun</div>
+      <input type="number" class="inp" id="new-year-inp" placeholder="contoh: 2026" style="margin-bottom:12px"/>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn-ghost" id="modal-cancel">Batal</button>
+        <button class="btn-g" id="modal-add">Tambah</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SheetJS via jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+/* ─── CONSTANTS ─── */
+const MONTHS_ID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const DAYS_ID = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+const CY = new Date().getFullYear();
+
+/* ─── HELPERS ─── */
+const fmtPace = p => { if(!p)return"—"; const m=Math.floor(p),s=Math.round((p-m)*60); return `${m}:${s.toString().padStart(2,"0")}`; };
+const fmtDur = d => { if(!d)return"—"; const m=Math.floor(d),s=Math.round((d-m)*60); return `${m}:${s.toString().padStart(2,"0")}`; };
+const fmtDate = iso => { const [y,mo,d]=iso.split("-"); return `${d}/${mo}/${y}`; };
+const pct = (a,b) => b?(((a-b)/b)*100).toFixed(1):null;
+const LS_KEY = y => `rundata_${y}`;
+const el = id => document.getElementById(id);
+const show = id => el(id)&&el(id).classList.remove("hidden");
+const hide = id => el(id)&&el(id).classList.add("hidden");
+const toggle = (id, cond) => cond ? show(id) : hide(id);
+
+/* ─── STORAGE ─── */
+const loadYear = y => { try{const d=localStorage.getItem(LS_KEY(y));return d?JSON.parse(d):[]}catch{return[]} };
+const saveYear = (y,d) => { try{localStorage.setItem(LS_KEY(y),JSON.stringify(d))}catch{} };
+const loadYearList = () => { try{const r=localStorage.getItem("run_years");return r?JSON.parse(r):[CY]}catch{return[CY]} };
+const saveYearList = l => { try{localStorage.setItem("run_years",JSON.stringify(l))}catch{} };
+
+/* ─── STATE ─── */
+let yearList = loadYearList();
+let year = CY;
+let allData = {};
+yearList.forEach(y => { allData[y] = loadYear(y); });
+let tab = "dashboard";
+let showForm = false;
+let editId = null;
+let formData = {date:"",distance:"",pace:""};
+let cmpA = 0, cmpB = 1;
+let deleteConfirm = null;
+let targetDist = null;
+let intervalMode = false;
+let subCmp = "harian";
+
+/* ─── DERIVED ─── */
+const getSessions = () => (allData[year]||[]).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+const getMonthly = (sessions) => MONTHS_SHORT.map((name,idx)=>{
+  const ms = sessions.filter(s=>s.month===idx);
+  const dist = +ms.reduce((a,b)=>a+b.distance,0);
+  const pace = ms.length ? +(ms.reduce((a,b)=>a+b.pace,0)/ms.length).toFixed(2) : 0;
+  return {name, month:idx, dist, pace, count:ms.length};
+});
+
+/* ─── EXPORT EXCEL ─── */
+function centerSheet(ws, numCols, numRows) {
+  const center = {alignment:{horizontal:"center",vertical:"center"}};
+  for(let r=0;r<numRows;r++){
+    for(let c=0;c<numCols;c++){
+      const addr=XLSX.utils.encode_cell({r,c});
+      if(!ws[addr]) ws[addr]={v:"",t:"s"};
+      ws[addr].s = {...(ws[addr].s||{}), ...center};
+    }
+  }
+}
+
+function exportExcel() {
+  if(typeof XLSX === 'undefined') { alert('Library Excel belum loaded, coba lagi.'); return; }
+  const sessions = getSessions();
+  const wb = XLSX.utils.book_new();
+  const sorted = sessions;
+  const monthly = MONTHS_ID.map((name,idx)=>{
+    const ms=sorted.filter(s=>new Date(s.date).getMonth()===idx);
+    const dist=+ms.reduce((a,b)=>a+b.distance,0);
+    const pace=ms.length?+(ms.reduce((a,b)=>a+b.pace,0)/ms.length).toFixed(2):0;
+    const maxD=ms.length?+Math.max(...ms.map(s=>s.distance)):0;
+    return{name,dist,count:ms.length,pace,maxD};
+  });
+
+  // Sheet 1
+  const logHeaders=["No","Tanggal","Hari","Bulan","Jarak (km)","Pace","Durasi (menit)"];
+  const logRows=sorted.map((s,i)=>{const d=new Date(s.date);return[i+1,fmtDate(s.date),DAYS_ID[d.getDay()],MONTHS_ID[d.getMonth()],+s.distance,`${fmtPace(s.pace)} /km`,s.duration];});
+  const ws1=XLSX.utils.aoa_to_sheet([logHeaders,...logRows]);
+  ws1["!cols"]=[{wch:5},{wch:12},{wch:10},{wch:12},{wch:12},{wch:14},{wch:16}];
+  centerSheet(ws1, logHeaders.length, logRows.length+1);
+  XLSX.utils.book_append_sheet(wb,ws1,"Log Sesi");
+
+  // Sheet 2
+  const mHeaders=["Bulan","Total Jarak (km)","Jumlah Sesi","Avg Pace","Jarak Terpanjang (km)","Tren vs Bulan Lalu"];
+  const mRows=monthly.map((m,i)=>{const prev=monthly[i-1];let tren="—";if(prev&&prev.dist>0&&m.dist>0){const d=pct(m.dist,prev.dist);tren=parseFloat(d)>=0?`↑ +${d}%`:`↓ ${d}%`;}return[m.name,m.dist||"",m.count||"",m.pace?`${fmtPace(m.pace)} /km`:"—",m.maxD||"",tren];});
+  const ws2=XLSX.utils.aoa_to_sheet([mHeaders,...mRows]);
+  ws2["!cols"]=[{wch:14},{wch:18},{wch:14},{wch:14},{wch:22},{wch:20}];
+  centerSheet(ws2, mHeaders.length, mRows.length+1);
+  XLSX.utils.book_append_sheet(wb,ws2,"Ringkasan Bulanan");
+
+  // Sheet 3
+  const total=+sorted.reduce((a,b)=>a+b.distance,0);
+  const avgP=sorted.length?+(sorted.reduce((a,b)=>a+b.pace,0)/sorted.length).toFixed(2):0;
+  const fastest=sorted.length?sorted.reduce((a,b)=>b.pace<a.pace?b:a):null;
+  const longest=sorted.length?sorted.reduce((a,b)=>b.distance>a.distance?b:a):null;
+  const bestMo=monthly.reduce((a,b)=>b.dist>a.dist?b:a,monthly[0]);
+  const mostActive=monthly.reduce((a,b)=>b.count>a.count?b:a,monthly[0]);
+  const weeksWithRun=new Set(sorted.map(s=>{const diff=(new Date(s.date)-new Date(`${year}-01-01`))/(7*86400000);return Math.floor(diff);})).size;
+  const consistency=`${Math.round((weeksWithRun/52)*100)}%`;
+  const statRows=[["Tahun",year],["Total Jarak (km)",(+total||0).toFixed(2)||"—"],["Total Sesi",sorted.length||"—"],["Rata-rata Pace",avgP?`${fmtPace(avgP)} /km`:"—"],["Pace Terbaik",fastest?`${fmtPace(fastest.pace)} /km`:"—"],["Jarak Terpanjang",longest?`${(+longest.distance).toFixed(2)} km`:"—"],["Bulan Terbaik",bestMo.dist>0?`${bestMo.name} — ${(+bestMo.dist).toFixed(2)} km`:"—"],["Bulan Teraktif",mostActive.count>0?`${mostActive.name} — ${mostActive.count} sesi`:"—"],["Konsistensi",sorted.length?consistency:"—"]];
+  const ws3=XLSX.utils.aoa_to_sheet(statRows);
+  ws3["!cols"]=[{wch:30},{wch:24}];
+  centerSheet(ws3, 2, statRows.length);
+  XLSX.utils.book_append_sheet(wb,ws3,"Statistik Tahunan");
+
+  const today=new Date();
+  XLSX.writeFile(wb,`Lari_${year}_${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}.xlsx`);
+}
+
+/* ─── SVG CHARTS ─── */
+function svgAreaChart(container, data, xKey, yKey, color) {
+  const W = container.clientWidth || 320;
+  const H = 150, pad = {top:8,right:8,left:28,bottom:20};
+  const iW = W-pad.left-pad.right, iH = H-pad.top-pad.bottom;
+  if(!data.length){container.innerHTML='';return;}
+  const xs = data.map((_,i)=>i);
+  const ys = data.map(d=>d[yKey]);
+  const minY=Math.min(...ys), maxY=Math.max(...ys);
+  const xScale = i => pad.left + (i/(data.length-1||1))*iW;
+  const yScale = v => pad.top + iH - ((v-minY)/(maxY-minY||1))*iH;
+
+  // grid lines
+  let gridLines='', gridLabels='';
+  const steps=4;
+  for(let i=0;i<=steps;i++){
+    const v=minY+(maxY-minY)*(i/steps);
+    const y=yScale(v);
+    gridLines+=`<line x1="${pad.left}" y1="${y}" x2="${W-pad.right}" y2="${y}" stroke="#1a2535" stroke-dasharray="3,3"/>`;
+    gridLabels+=`<text x="${pad.left-4}" y="${y+3}" text-anchor="end" fill="#445" font-size="9">${v.toFixed(0)}</text>`;
+  }
+
+  // x labels (max 6)
+  let xLabels='';
+  const xStep=Math.max(1,Math.floor(data.length/5));
+  data.forEach((d,i)=>{if(i%xStep===0){xLabels+=`<text x="${xScale(i)}" y="${H-4}" text-anchor="middle" fill="#445" font-size="9">${d[xKey]}</text>`;}});
+
+  // path
+  let pathD='', areaD='';
+  data.forEach((d,i)=>{
+    const x=xScale(i), y=yScale(d[yKey]);
+    pathD+=(i===0?`M${x},${y}`:`L${x},${y}`);
+    areaD+=(i===0?`M${x},${pad.top+iH} L${x},${y}`:`L${x},${y}`);
+  });
+  areaD+=`L${xScale(data.length-1)},${pad.top+iH}Z`;
+
+  container.innerHTML=`<div class="chart-wrap"><svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.3"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    ${gridLines}${gridLabels}${xLabels}
+    <path d="${areaD}" fill="url(#ag)"/>
+    <path d="${pathD}" stroke="${color}" stroke-width="2" fill="none"/>
+  </svg></div>`;
+}
+
+function svgBarChart(container, data, xKey, yKey, color) {
+  const W = container.clientWidth || 320;
+  const H = 120, pad = {top:8,right:4,left:28,bottom:20};
+  const iW = W-pad.left-pad.right, iH = H-pad.top-pad.bottom;
+  if(!data.length){container.innerHTML='';return;}
+  const ys = data.map(d=>d[yKey]);
+  const maxY = Math.max(...ys,1);
+  const barW = Math.max(3,Math.floor(iW/data.length)-2);
+  const xScale = i => pad.left + (i/data.length)*iW + (iW/data.length - barW)/2;
+  const yScale = v => (v/maxY)*iH;
+
+  let bars='', labels='';
+  const step=Math.max(1,Math.floor(data.length/8));
+  data.forEach((d,i)=>{
+    const bH=yScale(d[yKey]);
+    bars+=`<rect x="${xScale(i)}" y="${pad.top+iH-bH}" width="${barW}" height="${bH}" fill="${color}" rx="2"/>`;
+    if(i%step===0) labels+=`<text x="${xScale(i)+barW/2}" y="${H-4}" text-anchor="middle" fill="#445" font-size="9">${d[xKey]}</text>`;
+  });
+
+  // y axis labels
+  let yLabels='';
+  for(let i=0;i<=3;i++){
+    const v=(maxY*i/3);
+    const y=pad.top+iH-(yScale(v));
+    yLabels+=`<text x="${pad.left-4}" y="${y+3}" text-anchor="end" fill="#445" font-size="9">${v.toFixed(0)}</text>`;
+  }
+
+  container.innerHTML=`<div class="chart-wrap"><svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}">
+    <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top+iH}" stroke="#1a2535"/>
+    ${yLabels}${bars}${labels}
+  </svg></div>`;
+}
+
+function svgLineChart(container, data, xKey, yKey, color) {
+  const W = container.clientWidth || 320;
+  const H = 150, pad = {top:8,right:8,left:36,bottom:20};
+  const iW = W-pad.left-pad.right, iH = H-pad.top-pad.bottom;
+  if(data.length<2){container.innerHTML='';return;}
+  const ys = data.map(d=>d[yKey]);
+  const minY=Math.min(...ys)*0.98, maxY=Math.max(...ys)*1.02;
+  const xScale = i => pad.left + (i/(data.length-1))*iW;
+  const yScale = v => pad.top + iH - ((v-minY)/(maxY-minY||1))*iH;
+
+  let gridLines='', yLabels='';
+  for(let i=0;i<=3;i++){
+    const v=minY+(maxY-minY)*(i/3);
+    const y=yScale(v);
+    gridLines+=`<line x1="${pad.left}" y1="${y}" x2="${W-pad.right}" y2="${y}" stroke="#1a2535" stroke-dasharray="3,3"/>`;
+    yLabels+=`<text x="${pad.left-4}" y="${y+3}" text-anchor="end" fill="#445" font-size="9">${fmtPace(v)}</text>`;
+  }
+
+  let pathD='', dots='', xLabels='';
+  data.forEach((d,i)=>{
+    const x=xScale(i),y=yScale(d[yKey]);
+    pathD+=(i===0?`M${x},${y}`:`L${x},${y}`);
+    dots+=`<circle cx="${x}" cy="${y}" r="3" fill="${color}"/>`;
+    xLabels+=`<text x="${x}" y="${H-4}" text-anchor="middle" fill="#445" font-size="9">${d[xKey]}</text>`;
+  });
+
+  container.innerHTML=`<div class="chart-wrap"><svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}">
+    ${gridLines}${yLabels}
+    <path d="${pathD}" stroke="${color}" stroke-width="2" fill="none"/>
+    ${dots}${xLabels}
+  </svg></div>`;
+}
+
+function svgHeatmap(container, sessions) {
+  const map={};
+  sessions.forEach(s=>{map[s.date]=(map[s.date]||0)+s.distance;});
+
+  const cells=[];
+  for(let mo=0;mo<12;mo++){
+    const days=new Date(year,mo+1,0).getDate();
+    for(let d=1;d<=days;d++){
+      const dt=`${year}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+      cells.push({date:dt,dist:map[dt]||0,dow:new Date(dt).getDay()});
+    }
+  }
+
+  const weeks=[];let wk=[];
+  cells.forEach((c,i)=>{
+    if(i===0){for(let j=0;j<c.dow;j++)wk.push(null);}
+    wk.push(c);
+    if(c.dow===6){weeks.push(wk);wk=[];}
+  });
+  if(wk.length)weeks.push(wk);
+
+  const colorOf = d=>!d?"#1a2535":d<5?"rgba(0,255,157,0.16)":d<10?"rgba(0,255,157,0.4)":d<15?"rgba(0,255,157,0.67)":"#00ff9d";
+  const cw=13,ch=13,gap=2;
+  const W=weeks.length*(cw+gap)+4, H=7*(ch+gap)+24;
+
+  let rects='';
+  weeks.forEach((wk,wi)=>{
+    Array.from({length:7}).forEach((_,di)=>{
+      const c=wk[di];
+      if(c){
+        rects+=`<rect x="${wi*(cw+gap)+2}" y="${di*(ch+gap)}" width="${cw}" height="${ch}" rx="2" fill="${colorOf(c.dist)}"><title>${c.date}${c.dist?" — "+c.dist+"km":""}</title></rect>`;
+      }
+    });
+  });
+
+  const legend=[0.16,0.4,0.67,1].map((o,i)=>
+    `<rect x="${i*(12+3)+80}" y="${H-12}" width="11" height="11" rx="2" fill="rgba(0,255,157,${o})"/>`
+  ).join('');
+
+  container.innerHTML=`<div class="lbl" style="margin-bottom:10px">Kalender ${year}</div>
+  <div style="overflow-x:auto"><svg width="${Math.max(W,300)}" height="${H}" style="min-width:${W}px">
+    ${rects}
+    <text x="0" y="${H-4}" fill="#445" font-size="10">Tidak lari</text>
+    ${legend}
+    <text x="${4*(12+3)+84}" y="${H-4}" fill="#445" font-size="10">15km+</text>
+  </svg></div>`;
+}
+
+function svgBarChartCmp(container, mA, mB, nameA, nameB) {
+  const W = container.clientWidth || 320;
+  const H = 170, pad = {top:8,right:8,left:70,bottom:20};
+  const iW = W-pad.left-pad.right, iH = H-pad.top-pad.bottom;
+  const rows = [
+    {label:"Jarak (km)", a:mA.dist, b:mB.dist},
+    {label:"Sesi", a:mA.count, b:mB.count},
+    {label:"Pace ×10", a:+(mA.pace*10).toFixed(1), b:+(mB.pace*10).toFixed(1)},
+  ];
+  const maxVal = Math.max(...rows.map(r=>Math.max(r.a,r.b)),1);
+  const rowH = iH/rows.length;
+  const barH = 12;
+
+  let bars='', labels='', yLabels='';
+  rows.forEach((r,i)=>{
+    const y0 = pad.top + i*rowH + rowH/2;
+    const wa = (r.a/maxVal)*iW;
+    const wb = (r.b/maxVal)*iW;
+    bars+=`<rect x="${pad.left}" y="${y0-barH-1}" width="${wa}" height="${barH}" fill="#00ff9d" rx="3"/>`;
+    bars+=`<rect x="${pad.left}" y="${y0+1}" width="${wb}" height="${barH}" fill="#7eb8f7" rx="3"/>`;
+    yLabels+=`<text x="${pad.left-6}" y="${y0+3}" text-anchor="end" fill="#889" font-size="11" font-weight="700">${r.label}</text>`;
+  });
+
+  // legend
+  const legY = H-4;
+  const legX = W/2 - 60;
+
+  container.innerHTML=`<div class="lbl" style="margin-bottom:10px">Perbandingan Langsung</div>
+  <div class="chart-wrap"><svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}">
+    ${yLabels}${bars}
+    <rect x="${legX}" y="${legY-9}" width="10" height="10" fill="#00ff9d" rx="2"/>
+    <text x="${legX+13}" y="${legY}" fill="#889" font-size="10">${nameA}</text>
+    <rect x="${legX+55}" y="${legY-9}" width="10" height="10" fill="#7eb8f7" rx="2"/>
+    <text x="${legX+68}" y="${legY}" fill="#889" font-size="10">${nameB}</text>
+  </svg></div>`;
+}
+
+/* ─── RENDER ─── */
+function render() {
+  const sessions = getSessions();
+  const monthly = getMonthly(sessions);
+
+  // header
+  el("header-year").textContent = year;
+  el("btn-export").disabled = !sessions.length;
+
+  // year tabs
+  const tabsEl = el("year-tabs");
+  tabsEl.innerHTML = yearList.map(y2=>
+    `<button class="yr-tab${year===y2?" active":""}" onclick="switchYear(${y2})">${y2}</button>`
+  ).join('') + `<button onclick="el('modal-year').classList.remove('hidden')" style="background:transparent;border:none;color:#445;cursor:pointer;padding:7px 12px;font-family:'Barlow Condensed';font-weight:700;font-size:18px;line-height:1;flex-shrink:0">＋</button>`;
+
+  // form
+  toggle("form-section", showForm);
+  if(showForm) el("form-title").textContent = editId ? "EDIT SESI" : `TAMBAH SESI — ${year}`;
+
+  // tabs visibility
+  ["dashboard","bulanan","bandingkan","log","pushup","jadwal"].forEach(t=>{
+    const pane = el(`tab-${t}`);
+    if(t===tab){ pane.classList.remove("hidden"); pane.classList.add("fade"); }
+    else { pane.classList.add("hidden"); }
+    // nav color (only 4 nav tabs exist now)
+    const nl = el(`nl-${t}`);
+    if(nl) nl.style.color = t===tab ? "#00ff9d" : "#445";
+    const nd = el(`nd-${t}`);
+    if(nd) nd.style.display = t===tab ? "block" : "none";
+    const ni = el(`ni-${t}`);
+    if(ni){ ni.classList.toggle("active", t===tab); ni.querySelector("svg").style.stroke = t===tab ? "#00ff9d" : "#445"; }
+  });
+
+  // ── DASHBOARD ──
+  if(tab==="dashboard"){
+    // Today workout mini card
+    const todayEl=el("dashboard-today-workout");
+    if(todayEl){
+      const dow=new Date().getDay();
+      const td=JADWAL[dow];
+      const sesiTotal=td.sesi.filter(s=>s.type!=="rest").length;
+      const sesiDone=td.sesi.filter((s,i)=>s.type!=="rest"&&isJadwalChecked&&isJadwalChecked(dow,i)).length;
+      const allDone=sesiTotal>0&&sesiDone>=sesiTotal;
+      todayEl.innerHTML=`<div style="background:${td.color}11;border:1px solid ${td.color}33;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="switchTab('jadwal')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:22px">${td.emoji}</div>
+          <div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:#445">JADWAL HARI INI · ${td.hari.toUpperCase()}</div>
+            <div style="font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:#e8f0fe;margin-top:1px">${td.sesi.map(s=>s.label).join(" · ")}</div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          ${sesiTotal>0
+            ?`<div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px;color:${allDone?"#00ff9d":td.color}">${sesiDone}/${sesiTotal}</div>`
+            :`<div style="font-size:18px">😴</div>`}
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#445" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>`;
+    }
+    const hasData = sessions.length>0;
+    toggle("empty-dashboard", !hasData);
+    if(!hasData) el("empty-year-d").textContent = `Belum ada sesi di ${year}`;
+
+    const yearly = hasData ? {
+      total: +sessions.reduce((a,b)=>a+b.distance,0),
+      avgPace: +(sessions.reduce((a,b)=>a+b.pace,0)/sessions.length).toFixed(2),
+      count: sessions.length,
+      best: sessions.reduce((a,b)=>b.distance>a.distance?b:a)
+    } : null;
+
+    const statsEl = el("stats-cards");
+    if(yearly){
+      statsEl.classList.remove("hidden");
+      statsEl.innerHTML = [
+        {label:"Total Jarak",val:yearly.total.toFixed(2),unit:" km",color:"#00ff9d"},
+        {label:"Total Sesi",val:yearly.count,unit:"x",color:"#7eb8f7"},
+        {label:"Avg Pace",val:fmtPace(yearly.avgPace),unit:" /km",color:"#ffb347",sm:true},
+        {label:"Terpanjang",val:yearly.best.distance.toFixed(2),unit:" km",color:"#ff6b9d"},
+      ].map(c=>`<div class="card" style="min-width:0;overflow:hidden"><div class="lbl">${c.label}</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:${c.sm?24:28}px;line-height:1.1;color:${c.color};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.val}<span style="font-size:13px;color:#556">${c.unit}</span></div>
+      </div>`).join('');
+    } else {
+      statsEl.classList.add("hidden");
+    }
+
+    // cumulative chart
+    let cum=0;
+    const cumData = sessions.map(s=>{cum+=s.distance;return{date:s.date.slice(5),cum:+cum};});
+    const cumEl = el("chart-cumulative");
+    if(cumData.length>1){
+      cumEl.classList.remove("hidden");
+      cumEl.innerHTML = `<div class="lbl" style="margin-bottom:10px">Akumulasi Jarak ${year}</div>`;
+      const chartDiv = document.createElement("div");
+      cumEl.appendChild(chartDiv);
+      setTimeout(()=>svgAreaChart(chartDiv, cumData, "date", "cum", "#00ff9d"),0);
+    } else { cumEl.classList.add("hidden"); }
+
+    // weekly chart
+    const wmap={};
+    sessions.forEach(s=>{
+      const w=Math.floor((new Date(s.date)-new Date(`${year}-01-01`))/6048e5);
+      const k=`W${w+1}`; wmap[k]=(wmap[k]||0)+s.distance;
+    });
+    const weeklyData = Object.entries(wmap).map(([k,v])=>({k,dist:+v}));
+    const wkEl = el("chart-weekly");
+    if(weeklyData.length>1){
+      wkEl.classList.remove("hidden");
+      wkEl.innerHTML = `<div class="lbl" style="margin-bottom:10px">Jarak per Minggu</div>`;
+      const chartDiv = document.createElement("div");
+      wkEl.appendChild(chartDiv);
+      setTimeout(()=>svgBarChart(chartDiv, weeklyData, "k", "dist", "#7eb8f7"),0);
+    } else { wkEl.classList.add("hidden"); }
+
+    // heatmap
+    setTimeout(()=>svgHeatmap(el("chart-heatmap"), sessions), 0);
+  }
+
+  // ── BULANAN ──
+  if(tab==="bulanan"){
+    toggle("empty-bulanan", !sessions.length);
+    if(!sessions.length) el("empty-bulanan").innerHTML=`<div style="font-size:40px;margin-bottom:10px">🏃</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px">Belum ada sesi di ${year}</div>`;
+
+    const trendLabel=(curr,prev)=>{
+      const d=pct(curr,prev);
+      if(d===null||!prev)return{text:"—",color:"#556"};
+      const n=parseFloat(d);
+      if(n>10)return{text:`↑↑ +${d}%`,color:"#00ff9d"};
+      if(n>0)return{text:`↑ +${d}%`,color:"#7cfc00"};
+      if(n<-10)return{text:`↓↓ ${d}%`,color:"#ff4d6d"};
+      return{text:`↓ ${d}%`,color:"#ff9f45"};
+    };
+
+    el("monthly-cards").innerHTML = monthly.map((m,i)=>{
+      const prev=monthly[i-1];
+      const tr=trendLabel(m.dist,prev?.dist);
+      const ms=sessions.filter(s=>s.month===i);
+      const maxD=Math.max(...ms.map(s=>s.distance),1);
+      const bars=ms.length?`<div style="display:flex;gap:2px;align-items:flex-end;height:28px">${ms.map(s=>`<div style="flex:1;background:#00ff9d;border-radius:2px 2px 0 0;height:${(s.distance/maxD)*100}%;opacity:.6;min-height:3px" title="${s.distance}km"></div>`).join('')}</div>`:`<div style="font-size:11px;color:#2a3545;text-align:center;padding-top:2px">Tidak ada sesi</div>`;
+      return `<div class="card" style="opacity:${m.count===0?.4:1};margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+          <div><div class="lbl">${MONTHS_ID[i]} ${year}</div>
+            <div class="big" style="font-size:26px">${m.dist?(+m.dist).toFixed(2):0}<span style="font-size:13px;color:#556"> km</span></div></div>
+          <div style="text-align:right">
+            ${m.count>0?`<div style="font-size:12px;font-weight:700;color:${tr.color}">${tr.text}</div>`:''}
+            <div style="font-size:11px;color:#445">${m.count} sesi</div>
+            ${m.pace>0?`<div style="font-size:11px;color:#ffb347">${fmtPace(m.pace)} /km</div>`:''}
+          </div>
+        </div>${bars}
+      </div>`;
+    }).join('');
+
+    // pace trend
+    const paceData = monthly.filter(m=>m.pace>0);
+    const paceEl = el("chart-pace");
+    if(paceData.length>1){
+      paceEl.classList.remove("hidden");
+      paceEl.innerHTML=`<div class="lbl" style="margin-bottom:10px">Tren Pace Bulanan</div>`;
+      const chartDiv=document.createElement("div");
+      paceEl.appendChild(chartDiv);
+      setTimeout(()=>svgLineChart(chartDiv, paceData, "name", "pace", "#ffb347"),0);
+    } else { paceEl.classList.add("hidden"); }
+  }
+
+  // ── PERBANDINGAN ──
+  if(tab==="bandingkan" && subCmp==="bulanan"){
+    toggle("empty-cmp", !sessions.length);
+    if(!sessions.length) el("empty-cmp").innerHTML=`<div style="font-size:40px;margin-bottom:10px">🏃</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px">Belum ada sesi di ${year}</div>`;
+
+    // chips
+    el("chips-a").innerHTML = MONTHS_SHORT.map((m,i)=>
+      `<button class="chip${cmpA===i?" a":""}" onclick="cmpA=${i};render()">${m}</button>`
+    ).join('');
+    el("chips-b").innerHTML = MONTHS_SHORT.map((m,i)=>
+      `<button class="chip${cmpB===i?" b":""}" onclick="cmpB=${i};render()">${m}</button>`
+    ).join('');
+
+    const mA=monthly[cmpA], mB=monthly[cmpB];
+
+    el("cmp-cards").innerHTML=`
+      <div class="cmp-card" style="border:1px solid #00ff9d33">
+        <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#00ff9d;margin-bottom:2px">BULAN A</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:13px;color:#889;margin-bottom:4px">${mA.name} ${year}</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:30px;color:#00ff9d;line-height:1">${(+mA.dist||0).toFixed(2)}<span style="font-size:13px;color:#556"> km</span></div>
+        <div style="font-size:11px;color:#445;margin-top:4px">${mA.count} sesi</div>
+        ${mA.pace>0?`<div style="font-size:11px;color:#ffb347;margin-top:2px">${fmtPace(mA.pace)} /km</div>`:''}
+      </div>
+      <div style="text-align:center;font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:#2a3545">VS</div>
+      <div class="cmp-card" style="border:1px solid #7eb8f733">
+        <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#7eb8f7;margin-bottom:2px">BULAN B</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:13px;color:#889;margin-bottom:4px">${mB.name} ${year}</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:30px;color:#7eb8f7;line-height:1">${(+mB.dist||0).toFixed(2)}<span style="font-size:13px;color:#556"> km</span></div>
+        <div style="font-size:11px;color:#445;margin-top:4px">${mB.count} sesi</div>
+        ${mB.pace>0?`<div style="font-size:11px;color:#ffb347;margin-top:2px">${fmtPace(mB.pace)} /km</div>`:''}
+      </div>`;
+
+    const cmpChartEl = el("chart-cmp");
+    if(mA.count>0||mB.count>0){
+      cmpChartEl.classList.remove("hidden");
+      cmpChartEl.innerHTML='';
+      setTimeout(()=>svgBarChartCmp(cmpChartEl, mA, mB, MONTHS_SHORT[cmpA], MONTHS_SHORT[cmpB]),0);
+    } else { cmpChartEl.classList.add("hidden"); }
+
+    // conclude
+    const concludeEl = el("cmp-conclude");
+    concludeEl.classList.remove("hidden");
+    const rows=[
+      {k:"Jarak",a:mA.dist,b:mB.dist,u:" km",hi:true,f:null},
+      {k:"Sesi",a:mA.count,b:mB.count,u:"x",hi:true,f:null},
+      {k:"Pace",a:mA.pace,b:mB.pace,u:"",hi:false,f:fmtPace},
+    ];
+    concludeEl.innerHTML=`<div class="lbl" style="margin-bottom:10px">Kesimpulan</div>`+rows.map(({k,a,b,u,hi,f})=>{
+      const win=hi?(a>b?"A":a<b?"B":"="):(a&&b?(a<b?"A":a>b?"B":"="):"=");
+      const d=a&&b?Math.abs(parseFloat(pct(a,b))):null;
+      const pctW=a&&b?Math.min((a/(a+b))*100,100):50;
+      return `<div class="conclude-row">
+        <div style="width:48px;font-size:11px;font-weight:700;letter-spacing:1px;color:#556">${k}</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:17px;color:${win==="A"?"#00ff9d":"#889"};min-width:48px">${f?f(a):((u===" km"?(+a||0).toFixed(2):(a||0))+u)}</div>
+        <div style="flex:1;height:3px;background:#1a2535;border-radius:2px;overflow:hidden;position:relative">
+          ${a&&b?`<div class="bar-fill" style="width:${pctW}%;background:#00ff9d"></div>`:''}
+        </div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:17px;color:${win==="B"?"#7eb8f7":"#889"};min-width:48px;text-align:right">${f?f(b):((u===" km"?(+b||0).toFixed(2):(b||0))+u)}</div>
+        <div style="width:40px;font-size:10px;color:#445;text-align:right;font-weight:700">
+          ${win!=="="?`<span style="color:${win==="A"?"#00ff9d":"#7eb8f7"}">${win}</span>${d!==null?`<span style="display:block;font-size:9px">${d.toFixed(1)}%</span>`:'`'}`:"—"}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── HARIAN ──
+  if(tab==="bandingkan" && subCmp==="harian"){
+    toggle("empty-harian", !sessions.length);
+    if(!sessions.length) el("empty-harian").innerHTML=`<div style="font-size:40px;margin-bottom:10px">🏃</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px">Belum ada sesi di ${year}</div>`;
+    renderHarian();
+  }
+
+  // ── TARGET ──
+  if(tab==="dashboard"){
+    renderTarget();
+  }
+
+  // ── JADWAL ──
+  if(tab==="jadwal"){
+    renderJadwal();
+  }
+
+  // ── PUSH UP ──
+  if(tab==="pushup"){
+    renderPushup();
+  }
+
+  // ── LOG ──
+  if(tab==="log"){
+    el("log-count").textContent=`${sessions.length} SESI — ${year}`;
+    toggle("empty-log", !sessions.length);
+    if(!sessions.length) el("empty-log").innerHTML=`<div style="font-size:40px;margin-bottom:10px">🏃</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:20px">Belum ada sesi di ${year}</div><div style="font-size:13px;color:#445;line-height:1.6;margin-top:6px">Tekan <span style="color:#00ff9d;font-weight:700">+</span> di atas<br/>untuk mulai catat larimu</div>`;
+
+    el("log-list").innerHTML=[...sessions].reverse().map(s=>`
+      <div class="log-item" style="margin-bottom:8px">
+        <div style="flex:1;min-width:0">
+          <div class="lbl">${fmtDate(s.date)} · ${DAYS_ID[new Date(s.date).getDay()]}</div>
+          <div style="display:flex;gap:12px;align-items:baseline;margin-top:2px">
+            <span style="font-family:'Barlow Condensed';font-weight:800;font-size:20px;color:#00ff9d">${s.distance}<span style="font-size:11px;color:#556"> km</span></span>
+            <span style="font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:#ffb347">${fmtPace(s.pace)}<span style="font-size:10px;color:#445">/km</span></span>
+            <span style="font-size:11px;color:#445">${fmtDur(s.duration)} min</span>
+          </div>
+        </div>
+        <button class="edit-btn" onclick="startEdit('${s.id}')">EDIT</button>
+        ${deleteConfirm===s.id
+          ?`<div style="display:flex;gap:4px">
+              <button onclick="deleteSession('${s.id}')" style="background:#ff4d6d;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;font-weight:700">Hapus</button>
+              <button onclick="deleteConfirm=null;render()" style="background:#1a2535;color:#889;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer">Batal</button>
+            </div>`
+          :`<button class="del-btn" onclick="deleteConfirm='${s.id}';render()">×</button>`
+        }
+      </div>`).join('');
+  }
+}
+
+/* ─── SUB-TAB BANDINGKAN ─── */
+function switchSubCmp(s){
+  subCmp = s;
+  const isH = s==="harian";
+  el("sub-harian-btn").style.background = isH?"#00ff9d":"transparent";
+  el("sub-harian-btn").style.color = isH?"#080c10":"#445";
+  el("sub-bulanan-btn").style.background = isH?"transparent":"#7eb8f7";
+  el("sub-bulanan-btn").style.color = isH?"#445":"#080c10";
+  el("sub-harian").classList.toggle("hidden", !isH);
+  el("sub-bulanan").classList.toggle("hidden", isH);
+  render();
+}
+
+/* ─── HARIAN ─── */
+function renderHarian(){
+  const sessions = getSessions();
+  const dateA = el("harian-a")?.value;
+  const dateB = el("harian-b")?.value;
+
+  const getDaySessions = (date) => date ? sessions.filter(s=>s.date===date) : [];
+  const aggDay = (ss) => ({
+    count: ss.length,
+    dist: +ss.reduce((a,b)=>a+b.distance,0),
+    pace: ss.length ? +(ss.reduce((a,b)=>a+b.pace,0)/ss.length).toFixed(2) : 0,
+    duration: ss.reduce((a,b)=>a+b.duration,0),
+  });
+
+  const ssA = getDaySessions(dateA);
+  const ssB = getDaySessions(dateB);
+  const dA = aggDay(ssA);
+  const dB = aggDay(ssB);
+
+  const labelA = dateA ? fmtDate(dateA) : "—";
+  const labelB = dateB ? fmtDate(dateB) : "—";
+
+  el("harian-cards").innerHTML=`
+    <div class="cmp-card" style="border:1px solid #00ff9d33">
+      <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#00ff9d;margin-bottom:2px">HARI A</div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:12px;color:#889;margin-bottom:4px">${labelA}</div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:28px;color:#00ff9d;line-height:1">${(+dA.dist||0).toFixed(2)}<span style="font-size:12px;color:#556"> km</span></div>
+      <div style="font-size:11px;color:#445;margin-top:4px">${dA.count} sesi</div>
+      ${dA.pace>0?`<div style="font-size:11px;color:#ffb347;margin-top:2px">${fmtPace(dA.pace)} /km</div>`:''}
+      ${dA.duration>0?`<div style="font-size:11px;color:#556;margin-top:2px">${fmtDur(dA.duration)} menit</div>`:''}
+    </div>
+    <div style="text-align:center;font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:#2a3545">VS</div>
+    <div class="cmp-card" style="border:1px solid #7eb8f733">
+      <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:#7eb8f7;margin-bottom:2px">HARI B</div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:12px;color:#889;margin-bottom:4px">${labelB}</div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:28px;color:#7eb8f7;line-height:1">${(+dB.dist||0).toFixed(2)}<span style="font-size:12px;color:#556"> km</span></div>
+      <div style="font-size:11px;color:#445;margin-top:4px">${dB.count} sesi</div>
+      ${dB.pace>0?`<div style="font-size:11px;color:#ffb347;margin-top:2px">${fmtPace(dB.pace)} /km</div>`:''}
+      ${dB.duration>0?`<div style="font-size:11px;color:#556;margin-top:2px">${fmtDur(dB.duration)} menit</div>`:''}
+    </div>`;
+
+  const concludeEl = el("harian-conclude");
+  if(dateA && dateB && (dA.count>0 || dB.count>0)){
+    concludeEl.classList.remove("hidden");
+    const rows=[
+      {k:"Jarak",a:dA.dist,b:dB.dist,u:" km",hi:true,f:null},
+      {k:"Durasi",a:dA.duration,b:dB.duration,u:"m",hi:true,f:fmtDur},
+      {k:"Pace",a:dA.pace,b:dB.pace,u:"",hi:false,f:fmtPace},
+    ];
+    concludeEl.innerHTML=`<div class="lbl" style="margin-bottom:10px">Kesimpulan Harian</div>`+rows.map(({k,a,b,u,hi,f})=>{
+      const win=hi?(a>b?"A":a<b?"B":"="):(a&&b?(a<b?"A":a>b?"B":"="):"=");
+      const d=a&&b?Math.abs(parseFloat(pct(a,b))):null;
+      const pctW=a&&b?Math.min((a/(a+b))*100,100):50;
+      return `<div class="conclude-row">
+        <div style="width:48px;font-size:11px;font-weight:700;letter-spacing:1px;color:#556">${k}</div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:17px;color:${win==="A"?"#00ff9d":"#889"};min-width:48px">${f?f(a):((u===" km"?(+a||0).toFixed(2):(a||0))+u)}</div>
+        <div style="flex:1;height:3px;background:#1a2535;border-radius:2px;overflow:hidden;position:relative">
+          ${a&&b?`<div class="bar-fill" style="width:${pctW}%;background:#00ff9d"></div>`:''}
+        </div>
+        <div style="font-family:'Barlow Condensed';font-weight:800;font-size:17px;color:${win==="B"?"#7eb8f7":"#889"};min-width:48px;text-align:right">${f?f(b):((u===" km"?(+b||0).toFixed(2):(b||0))+u)}</div>
+        <div style="width:40px;font-size:10px;color:#445;text-align:right;font-weight:700">
+          ${win!=="="?`<span style="color:${win==="A"?"#00ff9d":"#7eb8f7"}">${win}</span>${d!==null?`<span style="display:block;font-size:9px">${d.toFixed(1)}%</span>`:''}`:"—"}
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    concludeEl.classList.add("hidden");
+  }
+}
+
+/* ─── TARGET & INTERVAL ─── */
+function setTargetDist(d){
+  targetDist = d;
+  renderTargetPresets();
+  renderTarget();
+}
+
+function toggleCustomDist(){
+  const row = el("custom-dist-row");
+  if(row.classList.contains("hidden")) row.classList.remove("hidden");
+  else row.classList.add("hidden");
+}
+
+function applyCustomDist(){
+  const v = parseFloat(el("custom-dist-val").value);
+  if(!v||v<=0) return;
+  targetDist = +v.toFixed(2);
+  el("custom-dist-row").classList.add("hidden");
+  renderTargetPresets();
+  renderTarget();
+}
+
+function renderTargetPresets(){
+  if(!el("target-presets")) return;
+  const presets = [
+    {label:"5 km", dist:5},
+    {label:"10 km", dist:10},
+    {label:"Half (21K)", dist:21.0975},
+    {label:"Full (42K)", dist:42.195},
+  ];
+  const isCustom = targetDist && !presets.some(p=>Math.abs(p.dist-targetDist)<0.01);
+  el("target-presets").innerHTML = presets.map(p=>{
+    const active = targetDist && Math.abs(p.dist-targetDist)<0.01;
+    return `<button class="chip${active?" a":""}" onclick="setTargetDist(${p.dist})">${p.label}</button>`;
+  }).join('') + `<button class="chip${isCustom?" a":""}" onclick="toggleCustomDist()">Atur Sendiri${isCustom&&targetDist?` (${targetDist}km)`:''}</button>`;
+  el("target-dist-label").textContent = targetDist ? `${targetDist} km` : "—";
+}
+
+function toggleIntervalMode(){
+  intervalMode = el("interval-toggle").checked;
+  const cfg = el("interval-config");
+  if(intervalMode) cfg.classList.remove("hidden");
+  else cfg.classList.add("hidden");
+  el("interval-result").classList.add("hidden");
+}
+
+function calcInterval(){
+  const dist = parseFloat(el("interval-dist").value)||1;
+  const reps = parseInt(el("interval-reps").value)||8;
+  const pace = parseFloat(el("interval-pace").value);
+  const resEl = el("interval-result");
+  resEl.classList.remove("hidden");
+
+  const totalDist = +(dist * reps).toFixed(2);
+  const timePerRep = pace ? dist * pace : null;
+  const totalTime = timePerRep ? timePerRep * reps : null;
+  const fmt = mins => { if(!mins)return"—"; const m=Math.floor(mins),s=Math.round((mins-m)*60); return `${m}:${s.toString().padStart(2,"0")}`; };
+
+  resEl.innerHTML = `
+    <div style="background:#0a1018;border-radius:8px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div class="lbl">Total Jarak</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#ffb347">${totalDist}<span style="font-size:11px;color:#556"> km</span></div></div>
+      <div><div class="lbl">Repetisi</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#ffb347">${reps}<span style="font-size:11px;color:#556">x</span></div></div>
+      <div><div class="lbl">Per Rep</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#ffb347">${dist}<span style="font-size:11px;color:#556"> km</span></div></div>
+      ${timePerRep?`<div><div class="lbl">Waktu/Rep</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#ffb347">${fmt(timePerRep)}</div></div>`:''}
+      ${totalTime?`<div style="grid-column:1/-1"><div class="lbl">Total Waktu</div><div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#00ff9d">${fmt(totalTime)}</div></div>`:''}
+    </div>`;
+}
+
+function renderTarget(){
+  renderTargetPresets();
+  if(!targetDist || !el("target-progress-card")) return;
+
+  const sessions = getSessions();
+  // find best session for this distance (closest >= targetDist or closest overall)
+  const candidates = sessions.filter(s=>s.distance>=targetDist*0.95);
+  const exact = sessions.filter(s=>Math.abs(s.distance-targetDist)<=0.5).sort((a,b)=>a.pace-b.pace);
+
+  const progCard = el("target-progress-card");
+  const sessCard = el("target-sessions-card");
+
+  // Total km this year vs target
+  const totalKm = +sessions.reduce((a,b)=>a+b.distance,0);
+  const pctDone = Math.min((totalKm/targetDist)*100,100);
+  const lapsCompleted = Math.floor(totalKm/targetDist);
+
+  progCard.classList.remove("hidden");
+  progCard.innerHTML=`
+    <div class="lbl" style="margin-bottom:10px">Progress vs ${targetDist} km</div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed';font-weight:800;font-size:28px;color:#ff6b9d">${totalKm}<span style="font-size:12px;color:#556"> km</span></span>
+      <span style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:#445;align-self:flex-end;padding-bottom:4px">dari ${targetDist} km</span>
+    </div>
+    <div style="background:#1a2535;border-radius:4px;height:8px;overflow:hidden;margin-bottom:8px">
+      <div style="height:100%;border-radius:4px;background:linear-gradient(90deg,#ff6b9d,#ffb347);width:${pctDone}%;transition:width .4s"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#445">
+      <span>${pctDone.toFixed(1)}% tercapai</span>
+      <span>${lapsCompleted > 0 ? `${lapsCompleted}x selesai` : `Kurang ${(targetDist-totalKm)} km`}</span>
+    </div>
+    ${exact.length>0?`
+    <div style="margin-top:10px;border-top:1px solid #1a2535;padding-top:10px">
+      <div class="lbl" style="margin-bottom:6px">Pace Terbaik untuk ~${targetDist}km</div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#00ff9d">${fmtPace(exact[0].pace)} <span style="font-size:12px;color:#556">/km</span></div>
+      <div style="font-size:11px;color:#445">${fmtDate(exact[0].date)} · ${exact[0].distance} km</div>
+    </div>`:''}`;
+
+  // sessions near target
+  if(exact.length>0){
+    sessCard.classList.remove("hidden");
+    sessCard.innerHTML=`<div class="lbl" style="margin-bottom:10px">Sesi ~${targetDist} km (±0.5km)</div>`+
+      exact.slice(0,5).map((s,i)=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;${i>0?"border-top:1px solid #1a2535":""}">
+          <div>
+            <div style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:${i===0?"#00ff9d":"#e8f0fe"}">${fmtPace(s.pace)} <span style="font-size:10px;color:#445">/km</span></div>
+            <div style="font-size:10px;color:#445">${fmtDate(s.date)}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:13px;font-weight:700;color:#ff6b9d">${s.distance} km</div>
+            <div style="font-size:10px;color:#445">${fmtDur(s.duration)} menit</div>
+          </div>
+          ${i===0?'<div style="font-size:18px;margin-left:6px">🏆</div>':''}
+        </div>`).join('');
+  } else { sessCard.classList.add("hidden"); }
+}
+
+/* ─── ACTIONS ─── */
+function switchTab(t){
+  tab=t;
+  if(t==="bandingkan") switchSubCmp(subCmp);
+  render();
+}
+function switchYear(y){ year=y; if(!allData[y]){allData[y]=loadYear(y);} tab="dashboard"; showForm=false; render(); }
+
+function toggleForm(){
+  if(showForm){ showForm=false; editId=null; }
+  else { showForm=true; editId=null; el("f-date").value=""; el("f-dist").value=""; el("f-pace").value=""; }
+  render();
+  el("btn-add").style.background = showForm?"#ff4d6d":"#00ff9d";
+  el("btn-add").textContent = showForm?"×":"+";
+}
+
+function saveSession(){
+  const date=el("f-date").value, distance=el("f-dist").value, pace=el("f-pace").value;
+  hide("form-err");
+  if(!date||!distance||!pace){ el("form-err").textContent="Semua field wajib diisi"; show("form-err"); return; }
+  const dist=parseFloat(distance), p=parseFloat(pace);
+  if(isNaN(dist)||dist<=0||isNaN(p)||p<=0){ el("form-err").textContent="Jarak dan pace harus angka positif"; show("form-err"); return; }
+  // Convert mm.ss format to decimal minutes: 7.32 → 7 + 32/60
+  const pMins = Math.floor(p), pSecs = Math.round((p - pMins) * 100);
+  if(pSecs >= 60){ el("form-err").textContent="Detik pace tidak boleh >= 60 (contoh: 7.45 bukan 7.60)"; show("form-err"); return; }
+  const pDecimal = pMins + pSecs/60;
+  const d=new Date(date);
+  const entry={id:editId||`s-${Date.now()}`,date,month:d.getMonth(),distance:+dist.toFixed(2),pace:+pDecimal.toFixed(4),duration:+(dist*pDecimal).toFixed(4)};
+  if(!allData[year]) allData[year]=[];
+  allData[year]=allData[year].filter(s=>s.id!==entry.id);
+  allData[year].push(entry);
+  saveYear(year, allData[year]);
+  showForm=false; editId=null;
+  el("btn-add").style.background="#00ff9d"; el("btn-add").textContent="+";
+  render();
+}
+
+function startEdit(id){
+  const s=getSessions().find(s=>s.id===id);
+  if(!s)return;
+  editId=id; showForm=true;
+  tab="dashboard";
+  el("f-date").value=s.date; el("f-dist").value=String(s.distance);
+  // Convert stored decimal pace back to mm.ss: 7.5333 → 7.32
+  const ep=s.pace, em=Math.floor(ep), es=Math.round((ep-em)*60);
+  el("f-pace").value=`${em}.${es.toString().padStart(2,"0")}`;
+  el("btn-add").style.background="#ff4d6d"; el("btn-add").textContent="×";
+  render();
+}
+
+function deleteSession(id){
+  allData[year]=(allData[year]||[]).filter(s=>s.id!==id);
+  saveYear(year,allData[year]);
+  deleteConfirm=null;
+  render();
+}
+
+function addYear(){
+  const y=parseInt(el("new-year-inp").value);
+  if(!y||y<1900||y>2200){el("new-year-inp").value="";return;}
+  if(!yearList.includes(y)){ yearList=[...yearList,y].sort((a,b)=>a-b); saveYearList(yearList); allData[y]=loadYear(y); }
+  el("modal-year").classList.add("hidden");
+  el("new-year-inp").value="";
+  switchYear(y);
+}
+
+/* ─── PUSH UP MODULE ─── */
+const PU_KEY = 'pushup_log';
+const PU_TARGET_KEY = 'pushup_target';
+
+function getTodayStr(){
+  const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function loadPushupLog(){ try{const r=localStorage.getItem(PU_KEY);return r?JSON.parse(r):{}}catch{return{}} }
+function savePushupLog(log){ try{localStorage.setItem(PU_KEY,JSON.stringify(log))}catch{} }
+function loadPushupTarget(){ try{return parseInt(localStorage.getItem(PU_TARGET_KEY))||30}catch{return 30} }
+function savePushupTarget(t){ try{localStorage.setItem(PU_TARGET_KEY,String(t))}catch{} }
+
+let puLog = loadPushupLog();
+let puTarget = loadPushupTarget();
+
+function adjustPushup(delta){
+  const today=getTodayStr();
+  const cur=puLog[today]||0;
+  const next=Math.max(0,cur+delta);
+  puLog[today]=next;
+  savePushupLog(puLog);
+  renderPushup();
+}
+
+function resetTodayPushup(){
+  const today=getTodayStr();
+  if((puLog[today]||0)===0) return;
+  if(!confirm('Reset push up hari ini ke 0?')) return;
+  puLog[today]=0;
+  savePushupLog(puLog);
+  renderPushup();
+}
+
+function applyPushupTarget(){
+  const v=parseInt(el("pu-custom-target")?.value||"");
+  if(!v||v<1) return;
+  puTarget=v;
+  savePushupTarget(v);
+  el("pu-custom-target").value="";
+  renderPushupPresets();
+  renderPushup();
+}
+
+function setPushupTarget(t){
+  puTarget=t;
+  savePushupTarget(t);
+  renderPushupPresets();
+  renderPushup();
+}
+
+function renderPushupPresets(){
+  const presets=[20,30,50,100];
+  const btn=el("pu-preset-btns");
+  if(!btn) return;
+  btn.innerHTML=presets.map(p=>`<button class="chip${puTarget===p?" a":""}" onclick="setPushupTarget(${p})">${p} reps</button>`).join('');
+  if(el("pu-target-label")) el("pu-target-label").textContent=`${puTarget} push up`;
+}
+
+function calcPushupStreak(){
+  let streak=0;
+  const d=new Date();
+  // check if today done first (don't break streak if today not yet)
+  const todayStr=getTodayStr();
+  const todayDone=(puLog[todayStr]||0)>=puTarget;
+  if(!todayDone){
+    // start from yesterday
+    d.setDate(d.getDate()-1);
+  }
+  while(true){
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    if((puLog[key]||0)>=puTarget){ streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderPushup(){
+  if(!el("pu-done-num")) return;
+  const today=getTodayStr();
+  const done=puLog[today]||0;
+  const pct=Math.min(done/puTarget,1);
+  const circ=2*Math.PI*78; // r=78
+
+  // Ring
+  el("pu-done-num").textContent=done;
+  el("pu-target-num").textContent=puTarget;
+  const ring=el("pu-ring-fill");
+  if(ring){
+    ring.setAttribute("stroke-dasharray",circ.toFixed(1));
+    ring.setAttribute("stroke-dashoffset",(circ*(1-pct)).toFixed(1));
+    ring.setAttribute("stroke",done>=puTarget?"#00ff9d":"#ff6b9d");
+  }
+
+  // Date label
+  const dObj=new Date();
+  const dLabel=`${DAYS_ID[dObj.getDay()]}, ${dObj.getDate()} ${MONTHS_ID[dObj.getMonth()]} ${dObj.getFullYear()}`;
+  if(el("pu-date-label")) el("pu-date-label").textContent=dLabel;
+
+  // Streak
+  const streak=calcPushupStreak();
+  if(el("pu-streak-num")) el("pu-streak-num").textContent=streak;
+
+  // Month total
+  const mo=new Date().getMonth()+1; const yr=new Date().getFullYear();
+  const moPrefix=`${yr}-${String(mo).padStart(2,"0")}`;
+  const moTotal=Object.entries(puLog).filter(([k])=>k.startsWith(moPrefix)).reduce((a,[,v])=>a+v,0);
+  if(el("pu-month-total")) el("pu-month-total").textContent=moTotal;
+
+  // Weekly bars
+  renderPushupWeeklyBars();
+
+  // Log list
+  renderPushupLogList();
+
+  // Presets
+  renderPushupPresets();
+}
+
+function renderPushupWeeklyBars(){
+  const wrap=el("pu-weekly-bars");
+  if(!wrap) return;
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    days.push({key,label:DAYS_ID[d.getDay()].slice(0,3),val:puLog[key]||0,isToday:i===0});
+  }
+  const maxVal=Math.max(...days.map(d=>d.val),puTarget,1);
+  wrap.innerHTML=days.map(d=>{
+    const h=Math.max((d.val/maxVal)*50,d.val>0?4:0);
+    const done=d.val>=puTarget;
+    const color=done?"#00ff9d":d.isToday?"#ff6b9d":"#2a3545";
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative">
+      <div style="font-size:9px;color:#445;position:absolute;top:-16px;white-space:nowrap">${d.val>0?d.val:''}</div>
+      <div style="width:100%;height:${50-h}px"></div>
+      <div style="width:100%;height:${h}px;background:${color};border-radius:3px 3px 0 0;min-height:${d.val>0?4:0}px"></div>
+      <div style="font-size:9px;font-weight:700;color:${d.isToday?"#ff6b9d":"#445"};letter-spacing:.5px">${d.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderPushupLogList(){
+  const logEl=el("pu-log-list");
+  if(!logEl) return;
+  const entries=Object.entries(puLog).filter(([,v])=>v>0).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,14);
+  if(!entries.length){ logEl.innerHTML=`<div style="font-size:13px;color:#445;text-align:center;padding:12px 0">Belum ada catatan push up</div>`; return; }
+  logEl.innerHTML=entries.map(([date,val],i)=>{
+    const d=new Date(date+'T00:00:00');
+    const done=val>=puTarget;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;${i>0?"border-top:1px solid #1a2535":""}">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#889">${fmtDate(date)} · ${DAYS_ID[d.getDay()]}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+          <div style="width:60px;height:4px;background:#1a2535;border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${Math.min((val/puTarget)*100,100)}%;background:${done?"#00ff9d":"#ff6b9d"};border-radius:2px"></div>
+          </div>
+          <span style="font-size:10px;color:#445">${val}/${puTarget}</span>
+        </div>
+      </div>
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:24px;color:${done?"#00ff9d":"#ff6b9d"}">${val}${done?' <span style="font-size:14px">✓</span>':''}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── EVENT LISTENERS ─── */
+el("btn-add").addEventListener("click", toggleForm);
+el("btn-cancel").addEventListener("click", ()=>{ showForm=false; editId=null; el("btn-add").style.background="#00ff9d"; el("btn-add").textContent="+"; render(); });
+el("btn-save").addEventListener("click", saveSession);
+el("btn-export").addEventListener("click", exportExcel);
+el("modal-cancel").addEventListener("click", ()=>{ el("modal-year").classList.add("hidden"); el("new-year-inp").value=""; });
+el("modal-add").addEventListener("click", addYear);
+el("new-year-inp").addEventListener("keydown", e=>{ if(e.key==="Enter") addYear(); });
+el("modal-year").addEventListener("click", e=>{ if(e.target===el("modal-year")) el("modal-year").classList.add("hidden"); });
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>switchTab(btn.dataset.tab));
+});
+
+/* ─── JADWAL MODULE ─── */
+const JADWAL_CHECK_KEY = 'jadwal_checks';
+
+const JADWAL = [
+  { // Minggu = 0
+    hari: "Minggu",
+    emoji: "🌟",
+    color: "#ffb347",
+    sesi: [
+      { waktu: "Pagi", label: "Long Run", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Strength Training", type: "gym", color: "#7eb8f7" },
+    ]
+  },
+  { // Senin = 1
+    hari: "Senin",
+    emoji: "🔥",
+    color: "#00ff9d",
+    sesi: [
+      { waktu: "Pagi", label: "Easy Run", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Chest + Tricep", type: "gym", color: "#7eb8f7" },
+    ]
+  },
+  { // Selasa = 2
+    hari: "Selasa",
+    emoji: "⚡",
+    color: "#ffb347",
+    sesi: [
+      { waktu: "Pagi", label: "Tempo Run", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Back + Bicep", type: "gym", color: "#7eb8f7" },
+    ]
+  },
+  { // Rabu = 3
+    hari: "Rabu",
+    emoji: "💥",
+    color: "#ff6b9d",
+    sesi: [
+      { waktu: "Pagi", label: "Interval 400m × 5", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Leg Day", type: "gym", color: "#7eb8f7" },
+    ]
+  },
+  { // Kamis = 4
+    hari: "Kamis",
+    emoji: "💪",
+    color: "#7eb8f7",
+    sesi: [
+      { waktu: "Pagi", label: "Easy Run", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Shoulder + Core", type: "gym", color: "#7eb8f7" },
+    ]
+  },
+  { // Jumat = 5
+    hari: "Jum'at",
+    emoji: "🔥",
+    color: "#ff6b9d",
+    sesi: [
+      { waktu: "Pagi", label: "Interval 400m × 5", type: "run", color: "#00ff9d" },
+      { waktu: "Sore", label: "Rest", type: "rest", color: "#445" },
+    ]
+  },
+  { // Sabtu = 6
+    hari: "Sabtu",
+    emoji: "😴",
+    color: "#445",
+    sesi: [
+      { waktu: "Full Day", label: "Rest Day", type: "rest", color: "#445" },
+    ]
+  },
+];
+
+function loadJadwalChecks(){ try{const r=localStorage.getItem(JADWAL_CHECK_KEY);return r?JSON.parse(r):{}}catch{return{}} }
+function saveJadwalChecks(c){ try{localStorage.setItem(JADWAL_CHECK_KEY,JSON.stringify(c))}catch{} }
+
+let jadwalChecks = loadJadwalChecks();
+
+function jadwalCheckKey(dow, sesiIdx){
+  // key per week so resets weekly: "2026-W23-1-0"
+  const d=new Date();
+  const startOfYear=new Date(d.getFullYear(),0,1);
+  const week=Math.floor((d-startOfYear)/(7*86400000))+1;
+  return `${d.getFullYear()}-W${week}-${dow}-${sesiIdx}`;
+}
+
+function toggleJadwalCheck(dow, sesiIdx){
+  const key=jadwalCheckKey(dow,sesiIdx);
+  jadwalChecks[key]=!jadwalChecks[key];
+  saveJadwalChecks(jadwalChecks);
+  renderJadwal();
+}
+
+function isJadwalChecked(dow, sesiIdx){
+  return !!jadwalChecks[jadwalCheckKey(dow,sesiIdx)];
+}
+
+function renderJadwal(){
+  const banner=el("jadwal-today-banner");
+  const list=el("jadwal-week-list");
+  if(!banner||!list) return;
+
+  const today=new Date().getDay(); // 0=Sun
+  const todayData=JADWAL[today];
+
+  // --- Today Banner ---
+  const todaySesiDone=todayData.sesi.filter((_,i)=>isJadwalChecked(today,i)).length;
+  const todaySesiTotal=todayData.sesi.filter(s=>s.type!=="rest").length;
+  const allDoneToday=todaySesiTotal>0&&todaySesiDone>=todaySesiTotal;
+
+  banner.innerHTML=`
+    <div style="background:linear-gradient(135deg,${todayData.color}18,${todayData.color}08);border:1px solid ${todayData.color}33;border-radius:14px;padding:14px 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:3px;color:${todayData.color}">HARI INI</div>
+          <div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;color:#e8f0fe;line-height:1.1">${todayData.emoji} ${todayData.hari}</div>
+        </div>
+        <div style="text-align:right">
+          ${todaySesiTotal>0
+            ? `<div style="font-family:'Barlow Condensed';font-weight:800;font-size:28px;color:${allDoneToday?"#00ff9d":todayData.color};line-height:1">${todaySesiDone}<span style="font-size:14px;color:#445">/${todaySesiTotal}</span></div>
+               <div style="font-size:10px;color:#445">selesai</div>`
+            : `<div style="font-size:20px">😴</div><div style="font-size:10px;color:#445">Rest Day</div>`
+          }
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${todayData.sesi.map((s,i)=>{
+          const done=isJadwalChecked(today,i);
+          const isRest=s.type==="rest";
+          return `<div onclick="${isRest?'':(`toggleJadwalCheck(${today},${i})`)}" 
+            style="display:flex;align-items:center;gap:6px;background:${done?"#00ff9d18":"#0e1520"};border:1px solid ${done?"#00ff9d55":s.color+"33"};border-radius:8px;padding:6px 10px;cursor:${isRest?"default":"pointer"};transition:all .15s">
+            <div style="width:6px;height:6px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
+            <div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#445">${s.waktu}</div>
+              <div style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:${done?"#00ff9d":s.color};${done?"text-decoration:line-through;opacity:.7":""}">${s.label}</div>
+            </div>
+            ${!isRest?`<div style="margin-left:4px;font-size:14px">${done?"✅":"⬜"}</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  // --- Full Week List ---
+  // Order: today first, then rest of week in order
+  const orderedDays=[];
+  for(let i=0;i<7;i++) orderedDays.push((today+i)%7);
+
+  list.innerHTML=orderedDays.map((dow,idx)=>{
+    const d=JADWAL[dow];
+    const isToday=dow===today;
+    const sesiTotal=d.sesi.filter(s=>s.type!=="rest").length;
+    const sesiDone=d.sesi.filter((s,i)=>s.type!=="rest"&&isJadwalChecked(dow,i)).length;
+    const allDone=sesiTotal>0&&sesiDone>=sesiTotal;
+    const isRest=d.sesi.every(s=>s.type==="rest");
+
+    return `<div class="jadwal-day${isToday?" today":""}" style="background:${isToday?"#0e1520":"#0a0e18"}">
+      <div class="jadwal-day-header" onclick="this.parentElement.querySelector('.jadwal-day-body').classList.toggle('hidden')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:32px;height:32px;border-radius:8px;background:${d.color}18;border:1px solid ${d.color}33;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${d.emoji}</div>
+          <div>
+            <div style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:${isToday?d.color:"#e8f0fe"}">${d.hari}${isToday?' <span style="font-size:10px;background:#00ff9d22;color:#00ff9d;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:1px">HARI INI</span>':''}</div>
+            <div style="font-size:11px;color:#445">${isRest?"Rest Day":d.sesi.map(s=>`${s.waktu}: ${s.label}`).join(" · ")}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${!isRest?`<div style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;color:${allDone?"#00ff9d":d.color}">${sesiDone}/${sesiTotal}</div>`:'<div style="font-size:14px">😴</div>'}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#445" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="jadwal-day-body${idx===0?"":""}" >
+        ${d.sesi.map((s,i)=>{
+          const done=isJadwalChecked(dow,i);
+          const isRestSesi=s.type==="rest";
+          const typeIcon=s.type==="run"?"🏃":s.type==="gym"?"🏋️":"😴";
+          return `<div class="sesi-pill" style="background:${done?"#00ff9d0d":"#0a0e18"};border:1px solid ${done?"#00ff9d33":s.color+"22"}">
+            <div class="sesi-dot" style="background:${s.color}"></div>
+            <div style="flex:1">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:#445;text-transform:uppercase">${s.waktu} ${typeIcon}</div>
+              <div style="font-family:'Barlow Condensed';font-weight:700;font-size:15px;color:${done?"#00ff9d":s.color};${done?"text-decoration:line-through;opacity:.6":""}">${s.label}</div>
+            </div>
+            ${!isRestSesi?`
+            <div class="check-box" style="border-color:${done?"#00ff9d":"#2a3545"};background:${done?"#00ff9d":"transparent"}" 
+              onclick="toggleJadwalCheck(${dow},${i})">
+              ${done?`<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#080c10" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`:''}
+            </div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── INIT ─── */
+render();
+
+/* ─── PWA SETUP ─── */
+(function(){
+  // Inject manifest as blob (so works from file:// and any host)
+  const manifest = {
+    name: "FitTracker – Lari & Push Up",
+    short_name: "FitTracker",
+    description: "Catat lari, set target push up harian, dan pantau perkembangan fitnesmu",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#080c10",
+    theme_color: "#00ff9d",
+    orientation: "portrait",
+    categories: ["sports", "health", "fitness"],
+    icons: [
+      {
+        src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23080c10'/><stop offset='100%25' stop-color='%230d1821'/></linearGradient></defs><rect width='192' height='192' rx='40' fill='url(%23bg)'/><circle cx='120' cy='32' r='16' fill='%2300ff9d'/><path d='M120 48 L104 80 L80 92 L56 128 L40 168' stroke='%2300ff9d' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M104 80 L136 90 L160 64' stroke='%2300ff9d' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M80 92 L74 116' stroke='%2300ff9d' stroke-width='8' stroke-linecap='round' fill='none'/></svg>",
+        sizes: "192x192",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+      },
+      {
+        src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23080c10'/><stop offset='100%25' stop-color='%230d1821'/></linearGradient></defs><rect width='512' height='512' rx='96' fill='url(%23bg)'/><circle cx='320' cy='86' r='42' fill='%2300ff9d'/><path d='M320 128 L278 214 L214 244 L150 342 L108 448' stroke='%2300ff9d' stroke-width='24' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M278 214 L362 240 L426 170' stroke='%2300ff9d' stroke-width='24' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M214 244 L198 308' stroke='%2300ff9d' stroke-width='20' stroke-linecap='round' fill='none'/></svg>",
+        sizes: "512x512",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+      }
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').setAttribute('href', url);
+
+  // Service Worker untuk offline support
+  if('serviceWorker' in navigator){
+    const swCode = `
+const CACHE = 'run-tracker-v1';
+const ASSETS = ['/'];
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(()=>{}));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+  ));
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
+});
+    `;
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+
+  // Tombol Install (A2HS)
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallBtn();
+  });
+
+  function showInstallBtn(){
+    if(document.getElementById('btn-install')) return;
+    const btn = document.createElement('button');
+    btn.id = 'btn-install';
+    btn.innerHTML = '📲 Install App';
+    btn.style.cssText = `
+      position:fixed;bottom:76px;left:50%;transform:translateX(-50%);
+      background:#00ff9d;color:#080c10;border:none;border-radius:24px;
+      padding:10px 24px;font-family:'Barlow Condensed',sans-serif;
+      font-weight:800;font-size:14px;letter-spacing:1px;cursor:pointer;
+      box-shadow:0 4px 20px #00ff9d55;z-index:999;
+      animation:pulse-install 2s ease-in-out infinite;
+    `;
+    const style = document.createElement('style');
+    style.textContent = `@keyframes pulse-install{0%,100%{box-shadow:0 4px 20px #00ff9d55}50%{box-shadow:0 4px 32px #00ff9daa}}`;
+    document.head.appendChild(style);
+    document.body.appendChild(btn);
+    btn.addEventListener('click', async () => {
+      if(!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const {outcome} = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      btn.remove();
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    const btn = document.getElementById('btn-install');
+    if(btn) btn.remove();
+  });
+})();
+</script>
+</body>
+</html>
